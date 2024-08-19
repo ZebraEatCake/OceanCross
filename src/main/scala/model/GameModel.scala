@@ -11,16 +11,22 @@ class GameModel(val player: Player) {
   var state: GameState = Playing
   var viewTopLeftY: Double = 0.0
   private val scrollSpeed: Double = 5.0 // pixels per second
+  private val viewHeight = 400
+  private val middleY = viewHeight / 2
 
   def isGameOver: Boolean = state == GameOver
 
   def updateView(deltaTime: Double): Unit = {
-    viewTopLeftY += scrollSpeed * deltaTime
+    if (player.y >= viewTopLeftY + middleY) {
+      viewTopLeftY += 20
+    } else {
+      viewTopLeftY += scrollSpeed * deltaTime
+    }
     checkGameOver()
   }
 
   def checkGameOver(): Unit = {
-    if (player.y < viewTopLeftY || player.y > viewTopLeftY + 400) { // Assuming view height is 400
+    if (player.y < viewTopLeftY || player.y > viewTopLeftY + viewHeight) { // Assuming view height is 400
       state = GameOver
     }
   }

@@ -11,7 +11,7 @@ import scalafx.Includes._
 
 object Main extends JFXApp {
   val canvas = new Canvas(400, 400)
-  val player = new model.Player(200, 200)
+  val player = new model.Player(200, 20)
   val gameModel = new GameModel(player)
   val playerController = new PlayerController(player)
   val gameController = new GameController(playerController, gameModel)
