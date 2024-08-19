@@ -1,17 +1,26 @@
 package controller
 
 import model.Player
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration._
 
 class PlayerController(val player: Player) {
-  private val movementSpeed = 2 // Smaller movement per update
+  private var lastActionTime: Long = 0
+  private val cooldownMillis = 200
 
   def processInput(key: String): Unit = {
-    key match {
-      case "W" => player.y += movementSpeed
-      case "S" => player.y -= movementSpeed
-      case "A" => player.x -= movementSpeed
-      case "D" => player.x += movementSpeed
-      case _ => // Do nothing for other keys
+    val currentTime = System.currentTimeMillis()
+
+    if (currentTime - lastActionTime >= cooldownMillis) {
+      key match {
+        case "W" => player.moveUp()
+        case "S" => player.moveDown()
+        case "A" => player.moveLeft()
+        case "D" => player.moveRight()
+        case _ => // Do nothing for other keys
+      }
+      lastActionTime = currentTime
     }
   }
 }
