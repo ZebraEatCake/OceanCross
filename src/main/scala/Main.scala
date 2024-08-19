@@ -1,3 +1,4 @@
+import scalafx.animation.AnimationTimer
 import scalafx.application.JFXApp
 import scalafx.application.JFXApp.PrimaryStage
 import scalafx.scene.Scene
@@ -5,7 +6,7 @@ import scalafx.scene.canvas.Canvas
 import controller.{GameController, PlayerController}
 import model.GameModel
 import view.GameView
-import scalafx.scene.input.KeyEvent
+import scalafx.scene.input.{KeyCode, KeyEvent}
 import scalafx.Includes._
 
 object Main extends JFXApp {
@@ -21,22 +22,33 @@ object Main extends JFXApp {
     gameController.startGameLoop(() => gameView.update())
   }
 
+  var keyPressed: Option[KeyCode] = None
+
+  val timer = AnimationTimer { _ =>
+    keyPressed.foreach { key =>
+      gameController.processInput(key.toString)
+    }
+  }
+
   stage = new PrimaryStage {
     title = "Crossy Road Game"
     scene = new Scene {
       content = canvas
 
       onKeyPressed = (event: KeyEvent) => {
-        val key = event.code.toString
-        if (gameModel.isGameOver && key == "R") {
+        keyPressed = Some(event.code)
+        if (gameModel.isGameOver && event.code == KeyCode.R) {
           restartGame()
-        } else {
-          gameController.processInput(key)
         }
+      }
+
+      onKeyReleased = (event: KeyEvent) => {
+        keyPressed = None
       }
     }
   }
 
   gameView.show(stage)
   gameController.startGameLoop(() => gameView.update())
+  timer.start()
 }
