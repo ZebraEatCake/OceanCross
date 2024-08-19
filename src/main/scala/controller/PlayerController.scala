@@ -1,17 +1,15 @@
 package controller
 
 import model.Player
-import scalafx.Includes._
-import scalafx.scene.input.{KeyEvent, KeyCode}
 
-object PlayerController {
+class PlayerController(val player: Player) {
 
-  def handleInput(player: Player, event: KeyEvent): Unit = {
-    event.code match {
-      case KeyCode.W => player.moveUp()
-      case KeyCode.S => player.moveDown()
-      case KeyCode.A => player.moveLeft()
-      case KeyCode.D => player.moveRight()
+  def processInput(key: String): Unit = {
+    key match {
+      case "W" => player.y += 10 // Move up; y increases
+      case "S" => player.y -= 10 // Move down; y decreases
+      case "A" => player.x -= 10 // Move left
+      case "D" => player.x += 10 // Move right
       case _ => // Do nothing for other keys
     }
   }

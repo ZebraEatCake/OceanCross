@@ -1,38 +1,30 @@
 package controller
 
-import model.{GameModel, Player}
-import scalafx.animation.AnimationTimer
-import scalafx.scene.input.KeyEvent
-import scalafx.stage.Stage
-import view.GameOverView
-import scalafx.Includes._
+import scala.concurrent.ExecutionContext
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
-object GameController {
+class GameController(val playerController: PlayerController) {
 
-  var timer: AnimationTimer = _
+  private val executor = Executors.newScheduledThreadPool(1)
+  implicit val ec: ExecutionContext = ExecutionContext.fromExecutor(executor)
 
-  def initializeGameView(): scalafx.scene.layout.Pane = {
-    GameModel.initialize()
+  private var viewTopLeftY = 0.0
+
+  def getViewTopLeftY: Double = viewTopLeftY
+
+  def processInput(key: String): Unit = {
+    playerController.processInput(key)
   }
 
-  def startGameLoop(stage: Stage): Unit = {
-    timer = AnimationTimer { _ =>
-      val isOutOfBounds = ScrollingScreenController.updateScrollingScreen(GameModel.gamePane, GameModel.player)
-      ObstacleController.moveObstacles()
+  def startGameLoop(updateView: () => Unit): Unit = {
+    executor.scheduleAtFixedRate(() => {
+      viewTopLeftY += 5 // Move view upwards
+      updateView()
+    }, 0, 1, TimeUnit.SECONDS)
+  }
 
-      if (isOutOfBounds) {
-        timer.stop() // Stop the timer when the game is over
-        GameOverView.display(stage) // Display the game over screen
-      }
-    }
-    timer.start() // Start the game loop
-
-    // Handling key presses using ScalaFX
-    GameModel.gamePane.onKeyPressed = (event: KeyEvent) => {
-      PlayerController.handleInput(GameModel.player, event)
-    }
-
-    // Ensure the pane gets focus when the game loop starts
-    GameModel.gamePane.requestFocus()
+  def stopGameLoop(): Unit = {
+    executor.shutdown()
   }
 }
