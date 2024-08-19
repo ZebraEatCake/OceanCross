@@ -6,43 +6,45 @@ import model.{GameModel, Player}
 import controller.GameController
 
 class GameView(val gameModel: GameModel, val canvas: Canvas, val controller: GameController) {
-
-  // Define the viewing dimensions
   val viewWidth = 400
   val viewHeight = 400
 
+  private val gameOverView = new GameOverView(gameModel, canvas)
+
   def show(stage: scalafx.application.JFXApp.PrimaryStage): Unit = {
-    update()  // Initial update to display the first view
+    update()
   }
 
   def update(): Unit = {
-    val graphicsContext = canvas.graphicsContext2D
-    val player = gameModel.player
+    if (gameModel.isGameOver) {
+      gameOverView.show()
+    } else {
+      val graphicsContext = canvas.graphicsContext2D
+      val player = gameModel.player
 
-    // Get the current view offset from the controller
-    val viewTopLeftY = controller.getViewTopLeftY
-    val viewTopLeftX = 0
+      val viewTopLeftY = controller.getViewTopLeftY
+      val viewTopLeftX = 0
 
-    // Clear the canvas
-    graphicsContext.clearRect(0, 0, canvas.width.value, canvas.height.value)
+      graphicsContext.clearRect(0, 0, canvas.width.value, canvas.height.value)
 
-    // Draw the visible portion of the game world
-    drawGameWorld(viewTopLeftX, viewTopLeftY)
+      // Draw the visible portion of the game world
+      drawGameWorld(viewTopLeftX, viewTopLeftY)
 
-    // Draw the player
-    drawPlayer(player, viewTopLeftX, viewTopLeftY)
+      // Draw the player
+      drawPlayer(player, viewTopLeftX, viewTopLeftY)
 
-    // Print the bottom-left and top-right coordinates of the view
-    val bottomLeftX = viewTopLeftX
-    val bottomLeftY = viewTopLeftY
-    val topRightX = viewTopLeftX + viewWidth
-    val topRightY = viewTopLeftY + viewHeight
+      // Print the bottom-left and top-right coordinates of the view
+      val bottomLeftX = viewTopLeftX
+      val bottomLeftY = viewTopLeftY
+      val topRightX = viewTopLeftX + viewWidth
+      val topRightY = viewTopLeftY + viewHeight
 
-    // Print view and player coordinates
-    println(s"View Coordinates:")
-    println(s"Bottom-left: (${bottomLeftX}, ${bottomLeftY})")
-    println(s"Top-right: (${topRightX}, ${topRightY})")
-    println(s"Player Position: (${player.x}, ${player.y})")
+      // Print view and player coordinates
+      println(s"View Coordinates:")
+      println(s"Bottom-left: (${bottomLeftX}, ${bottomLeftY})")
+      println(s"Top-right: (${topRightX}, ${topRightY})")
+      println(s"Player Position: (${player.x}, ${player.y})")
+    }
   }
 
   private def drawGameWorld(viewTopLeftX: Double, viewTopLeftY: Double): Unit = {

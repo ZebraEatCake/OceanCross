@@ -13,18 +13,26 @@ object Main extends JFXApp {
   val player = new model.Player(200, 200)
   val gameModel = new GameModel(player)
   val playerController = new PlayerController(player)
-  val gameController = new GameController(playerController)
+  val gameController = new GameController(playerController, gameModel)
   val gameView = new GameView(gameModel, canvas, gameController)
+
+  def restartGame(): Unit = {
+    gameModel.restart()
+    gameController.startGameLoop(() => gameView.update())
+  }
 
   stage = new PrimaryStage {
     title = "Crossy Road Game"
     scene = new Scene {
       content = canvas
 
-      // Set up key event handling
       onKeyPressed = (event: KeyEvent) => {
         val key = event.code.toString
-        gameController.processInput(key)
+        if (gameModel.isGameOver && key == "R") {
+          restartGame()
+        } else {
+          gameController.processInput(key)
+        }
       }
     }
   }
