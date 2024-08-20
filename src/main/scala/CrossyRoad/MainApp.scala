@@ -7,6 +7,7 @@ import scalafx.application.JFXApp.PrimaryStage
 import scalafx.scene.Scene
 import scalafxml.core.{FXMLLoader, NoDependencyResolver}
 import javafx.{scene => jfxs}
+import scalafx.scene.input.KeyEvent
 import scalafx.Includes._
 
 object MainApp extends JFXApp {
@@ -28,7 +29,11 @@ object MainApp extends JFXApp {
   // Set up the stage with the root layout
   stage = new PrimaryStage {
     title = "Crossy Road Game"
-    scene = new Scene(roots)
+    scene = new Scene(roots){
+      onKeyPressed = (event: KeyEvent) => {
+        gameController.processInput(event.getText.toUpperCase)
+      }
+    }
   }
 
   // Show the main game view
@@ -43,4 +48,5 @@ object MainApp extends JFXApp {
 
   // Call showMainGame to display the game
   showMainGame()
+
 }
