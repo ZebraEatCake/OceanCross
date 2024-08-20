@@ -1,19 +1,21 @@
 package CrossyRoad.view
 
-import javafx.fxml.FXML
-import javafx.scene.canvas.Canvas
-import javafx.scene.paint.Color
-import CrossyRoad.model.{GameModel, Player, GameState}
+import CrossyRoad.MainApp.{gameController, gameModel}
+import scalafx.scene.canvas.Canvas
+import scalafx.scene.paint.Color
+import CrossyRoad.model.{GameModel, GameState, Player}
+import scalafx.Includes._
+import scalafxml.core.macros.sfxml
 
-class MainGameController(gameModel: GameModel, gameController: GameController) {
+@sfxml
+class MainGameController(private var gameCanvas: Canvas){
 
-  @FXML
-  private var gameCanvas: Canvas = _
-
-  @FXML
   def initialize(): Unit = {
+    println("Initializing MainGameController")
     gameController.startGameLoop(update)
   }
+
+  initialize()
 
   def update(): Unit = {
     if (gameModel.state == GameState.Playing) {
@@ -24,12 +26,12 @@ class MainGameController(gameModel: GameModel, gameController: GameController) {
   }
 
   private def updatePlayingState(): Unit = {
-    val graphicsContext = gameCanvas.getGraphicsContext2D
+    val graphicsContext = gameCanvas.graphicsContext2D
     val player = gameModel.player
     val viewTopLeftY = gameModel.viewTopLeftY
     val viewTopLeftX = 0
 
-    graphicsContext.clearRect(0, 0, gameCanvas.getWidth, gameCanvas.getHeight)
+    graphicsContext.clearRect(0, 0, gameCanvas.width.value, gameCanvas.height.value)
 
     drawGameWorld(viewTopLeftX, viewTopLeftY)
     drawPlayer(player, viewTopLeftX, viewTopLeftY)
@@ -42,14 +44,14 @@ class MainGameController(gameModel: GameModel, gameController: GameController) {
   }
 
   private def drawGameWorld(viewTopLeftX: Double, viewTopLeftY: Double): Unit = {
-    val graphicsContext = gameCanvas.getGraphicsContext2D
-    graphicsContext.setFill(Color.LIGHTBLUE)
+    val graphicsContext = gameCanvas.graphicsContext2D
+    graphicsContext.fill = Color.LightBlue
     graphicsContext.fillRect(0, 0, 400, 400)
   }
 
   private def drawPlayer(player: Player, viewTopLeftX: Double, viewTopLeftY: Double): Unit = {
-    val graphicsContext = gameCanvas.getGraphicsContext2D
-    graphicsContext.setFill(Color.GREEN)
+    val graphicsContext = gameCanvas.graphicsContext2D
+    graphicsContext.fill = Color.Green
     val playerSize = 20
     val playerX = player.x - viewTopLeftX
     val playerY = 400 - (player.y - viewTopLeftY)
@@ -64,13 +66,9 @@ class MainGameController(gameModel: GameModel, gameController: GameController) {
   }
 
   private def printCoordinates(viewTopLeftX: Double, viewTopLeftY: Double, player: Player): Unit = {
-    val bottomLeftX = viewTopLeftX
-    val bottomLeftY = viewTopLeftY
-    val topRightX = viewTopLeftX + 400
-    val topRightY = viewTopLeftY + 400
     println(s"View Coordinates:")
-    println(s"Bottom-left: (${bottomLeftX}, ${bottomLeftY})")
-    println(s"Top-right: (${topRightX}, ${topRightY})")
+    println(s"Bottom-left: ($viewTopLeftX, $viewTopLeftY)")
+    println(s"Top-right: (${viewTopLeftX + 400}, ${viewTopLeftY + 400})")
     println(s"Player Position: (${player.x}, ${player.y})")
   }
 }

@@ -1,6 +1,5 @@
 package CrossyRoad.view
 
-import CrossyRoad.PlayerController
 import CrossyRoad.model.GameModel
 
 import scala.concurrent.ExecutionContext
