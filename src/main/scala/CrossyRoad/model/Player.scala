@@ -1,4 +1,4 @@
-package model
+package CrossyRoad.model
 
 class Player(var x: Double, var y: Double) {
   // Movement methods

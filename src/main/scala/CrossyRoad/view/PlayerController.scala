@@ -1,4 +1,4 @@
-package controller
+package CrossyRoad
 
 import model.Player
 import scala.concurrent.Future

@@ -1,6 +1,8 @@
-package controller
+package CrossyRoad.view
 
-import model.GameModel
+import CrossyRoad.PlayerController
+import CrossyRoad.model.GameModel
+
 import scala.concurrent.ExecutionContext
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
