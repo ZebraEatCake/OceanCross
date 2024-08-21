@@ -18,7 +18,6 @@ class GameModel(val player: Player) {
   var scrollSpeed: Double = 8.0 // pixels per second
   private val viewHeight = 400
   private val middleY = viewHeight / 2
-  private val obstacleGenerationChance: Double = 0.3
   private val maxObstaclesPerRow: Int = 3 // Maximum number of obstacles per row
   private var lastObstacleY: Double = 0.0
 
