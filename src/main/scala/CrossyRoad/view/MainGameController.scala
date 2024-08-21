@@ -4,7 +4,7 @@ import CrossyRoad.MainApp
 import CrossyRoad.MainApp.{gameController, gameModel, showGameOver}
 import scalafx.scene.canvas.Canvas
 import scalafx.scene.paint.Color
-import CrossyRoad.model.{GameModel, GameState, Player}
+import CrossyRoad.model.{GameModel, GameState, Player, Obstacle}
 import scalafx.Includes._
 import scalafx.application.Platform
 import scalafx.scene.control.{Alert, ButtonType}
@@ -24,7 +24,7 @@ class MainGameController(private var gameCanvas: Canvas){
     if (gameModel.state == GameState.Playing) {
       updatePlayingState()
     } else {
-      println("udpate")
+      println("update")
       gameController.stopGameLoop()
     }
   }
@@ -39,11 +39,10 @@ class MainGameController(private var gameCanvas: Canvas){
 
     drawGameWorld(viewTopLeftX, viewTopLeftY)
     drawPlayer(player, viewTopLeftX, viewTopLeftY)
+    drawObstacles(viewTopLeftX, viewTopLeftY)
 
     if (isPlayerOutOfBounds(player, viewTopLeftX, viewTopLeftY)) {
-      println("if statement")
-        MainApp.showGameOver()
-        MainApp.showTest()
+      MainApp.showGameOver()
       gameModel.state = GameState.GameOver
     }
 
@@ -65,6 +64,17 @@ class MainGameController(private var gameCanvas: Canvas){
     graphicsContext.fillRect(playerX, playerY, playerSize, playerSize)
   }
 
+  private def drawObstacles(viewTopLeftX: Double, viewTopLeftY: Double): Unit = {
+    val graphicsContext = gameCanvas.graphicsContext2D
+    graphicsContext.fill = Color.Red
+    val obstacleSize = 20
+    gameModel.obstacle.foreach(obstacle => {
+      val obstacleX = obstacle.x - viewTopLeftX
+      val obstacleY = 400 - (obstacle.y - viewTopLeftY)
+      graphicsContext.fillRect(obstacleX, obstacleY, obstacleSize, obstacleSize)
+    })
+  }
+
   private def isPlayerOutOfBounds(player: Player, viewTopLeftX: Double, viewTopLeftY: Double): Boolean = {
     val playerX = player.x - viewTopLeftX
     val playerY = 400 - (player.y - viewTopLeftY)
@@ -78,12 +88,4 @@ class MainGameController(private var gameCanvas: Canvas){
     println(s"Top-right: (${viewTopLeftX + 400}, ${viewTopLeftY + 400})")
     println(s"Player Position: (${player.x}, ${player.y})")
   }
-
-
-
-  private def restartGame(): Unit = {
-    gameModel.restart()
-    gameController.startGameLoop(update)
-  }
-
 }

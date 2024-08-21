@@ -6,8 +6,8 @@ import scalafx.scene.Scene
 import scalafx.scene.layout.BorderPane
 import scalafx.scene.layout.AnchorPane
 import scalafxml.core.{FXMLLoader, NoDependencyResolver}
-import CrossyRoad.model.{GameModel, Player}
-import CrossyRoad.view.{MainGameController, GameController, PlayerController}
+import CrossyRoad.model.{GameModel, Obstacle, Player}
+import CrossyRoad.view.{GameController, MainGameController, PlayerController}
 import scalafx.Includes._
 import javafx.{scene => jfxs}
 
@@ -38,15 +38,6 @@ object MainApp extends JFXApp {
 
   def showGameOver(): Unit = {
     val resource = getClass.getResource("view/GameOver.fxml")
-    val loader = new FXMLLoader(resource, NoDependencyResolver)
-    loader.load()
-    val roots = loader.getRoot[jfxs.layout.AnchorPane]
-    this.roots.setCenter(roots)
-    println("show game over")
-  }
-
-  def showTest(): Unit = {
-    val resource = getClass.getResource("view/test.fxml")
     val loader = new FXMLLoader(resource, NoDependencyResolver)
     loader.load()
     val roots = loader.getRoot[jfxs.layout.AnchorPane]
