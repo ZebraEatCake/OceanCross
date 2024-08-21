@@ -26,6 +26,7 @@ object MainApp extends JFXApp {
   loader.load()
   val roots = loader.getRoot[jfxs.layout.BorderPane]
 
+
   // Show the main game view
   def showMainGame(): Unit = {
     val resource = getClass.getResource("view/MainGame.fxml")
@@ -34,6 +35,24 @@ object MainApp extends JFXApp {
     val roots = loader.getRoot[jfxs.layout.AnchorPane]
     this.roots.setCenter(roots)
   }
+
+  def showGameOver(): Unit = {
+    val resource = getClass.getResource("view/GameOver.fxml")
+    val loader = new FXMLLoader(resource, NoDependencyResolver)
+    loader.load()
+    val roots = loader.getRoot[jfxs.layout.AnchorPane]
+    this.roots.setCenter(roots)
+    println("show game over")
+  }
+
+  def showTest(): Unit = {
+    val resource = getClass.getResource("view/test.fxml")
+    val loader = new FXMLLoader(resource, NoDependencyResolver)
+    loader.load()
+    val roots = loader.getRoot[jfxs.layout.AnchorPane]
+    this.roots.setCenter(roots)
+  }
+
 
   // Set up the stage with the root layout
   stage = new PrimaryStage {
@@ -44,7 +63,7 @@ object MainApp extends JFXApp {
       }
     }
     onCloseRequest = handle {
-      gameController.stopGameLoop()
+      gameController.shutdown()
     }
   }
 

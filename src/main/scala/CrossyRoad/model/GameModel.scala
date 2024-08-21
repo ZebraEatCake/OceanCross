@@ -1,5 +1,7 @@
 package CrossyRoad.model
 
+import CrossyRoad.MainApp
+
 object GameState extends Enumeration {
   type GameState = Value
   val Playing, GameOver = Value
@@ -22,16 +24,10 @@ class GameModel(val player: Player) {
     } else {
       viewTopLeftY += scrollSpeed * deltaTime
     }
-    checkGameOver()
-  }
-
-  def checkGameOver(): Unit = {
-    if (player.y < viewTopLeftY || player.y > viewTopLeftY + viewHeight) { // Assuming view height is 400
-      state = GameOver
-    }
   }
 
   def restart(): Unit = {
+    MainApp.gameController.stopGameLoop()
     state = Playing
     viewTopLeftY = 0.0
     player.x = 200

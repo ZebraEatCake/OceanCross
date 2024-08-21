@@ -1,17 +1,20 @@
 package CrossyRoad.view
 
-import CrossyRoad.MainApp.{gameController, gameModel}
+import CrossyRoad.MainApp
+import CrossyRoad.MainApp.{gameController, gameModel, showGameOver}
 import scalafx.scene.canvas.Canvas
 import scalafx.scene.paint.Color
 import CrossyRoad.model.{GameModel, GameState, Player}
 import scalafx.Includes._
+import scalafx.application.Platform
+import scalafx.scene.control.{Alert, ButtonType}
+import scalafx.scene.control.Alert.AlertType
 import scalafxml.core.macros.sfxml
 
 @sfxml
 class MainGameController(private var gameCanvas: Canvas){
 
   def initialize(): Unit = {
-    println("Initializing MainGameController")
     gameController.startGameLoop(update)
   }
 
@@ -21,6 +24,7 @@ class MainGameController(private var gameCanvas: Canvas){
     if (gameModel.state == GameState.Playing) {
       updatePlayingState()
     } else {
+      println("udpate")
       gameController.stopGameLoop()
     }
   }
@@ -37,6 +41,9 @@ class MainGameController(private var gameCanvas: Canvas){
     drawPlayer(player, viewTopLeftX, viewTopLeftY)
 
     if (isPlayerOutOfBounds(player, viewTopLeftX, viewTopLeftY)) {
+      println("if statement")
+        MainApp.showGameOver()
+        MainApp.showTest()
       gameModel.state = GameState.GameOver
     }
 
@@ -71,4 +78,12 @@ class MainGameController(private var gameCanvas: Canvas){
     println(s"Top-right: (${viewTopLeftX + 400}, ${viewTopLeftY + 400})")
     println(s"Player Position: (${player.x}, ${player.y})")
   }
+
+
+
+  private def restartGame(): Unit = {
+    gameModel.restart()
+    gameController.startGameLoop(update)
+  }
+
 }
