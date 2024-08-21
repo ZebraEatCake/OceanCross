@@ -12,7 +12,7 @@ class SoundManager {
     mediaPlayer = new MediaPlayer(media) {
       cycleCount = MediaPlayer.Indefinite
     }
-    mediaPlayer.volume = 0.7
+    mediaPlayer.volume = 0.5
     mediaPlayer.play()
   }
 

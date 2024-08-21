@@ -19,8 +19,8 @@
             <Font name="Forte" size="33.0" />
          </font>
       </Text>
-      <Button fx:id="playButton" layoutX="84.0" layoutY="222.0" mnemonicParsing="false" onAction="#startGame" prefHeight="40.0" prefWidth="239.0" text="Play" />
-      <Button fx:id="tutorialButton" layoutX="84.0" layoutY="274.0" mnemonicParsing="false" onAction="#showTutorial" prefHeight="40.0" prefWidth="116.0" text="Tutorial" />
-      <Button fx:id="quitButton" layoutX="207.0" layoutY="274.0" mnemonicParsing="false" onAction="#quitGame" prefHeight="40.0" prefWidth="116.0" text="Quit" />
+      <Button fx:id="playButton" layoutX="84.0" layoutY="222.0" mnemonicParsing="false" onAction="#startGame" opacity="0.88" prefHeight="40.0" prefWidth="239.0" text="Play" textFill="#0b94dd" />
+      <Button fx:id="tutorialButton" layoutX="84.0" layoutY="274.0" mnemonicParsing="false" onAction="#showTutorial" opacity="0.88" prefHeight="40.0" prefWidth="116.0" text="Tutorial" textFill="#0b94dd" />
+      <Button fx:id="quitButton" layoutX="207.0" layoutY="274.0" mnemonicParsing="false" onAction="#quitGame" opacity="0.88" prefHeight="40.0" prefWidth="116.0" text="Quit" textFill="#0b94dd" />
    </children>
 </AnchorPane>
