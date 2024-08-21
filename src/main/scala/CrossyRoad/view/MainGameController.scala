@@ -57,8 +57,6 @@ class MainGameController(private var gameCanvas: Canvas, private var scoreLabel:
       MainApp.showGameOver()
       gameModel.state = GameState.GameOver
     }
-
-    printCoordinates(viewTopLeftX, viewTopLeftY, player)
   }
 
   private def drawGameWorld(viewTopLeftX: Double, viewTopLeftY: Double): Unit = {
@@ -134,12 +132,5 @@ class MainGameController(private var gameCanvas: Canvas, private var scoreLabel:
         playerBottom > obstacleTop &&
         playerTop < obstacleBottom
     }
-  }
-
-  private def printCoordinates(viewTopLeftX: Double, viewTopLeftY: Double, player: Player): Unit = {
-    println(s"View Coordinates:")
-    println(s"Bottom-left: ($viewTopLeftX, $viewTopLeftY)")
-    println(s"Top-right: (${viewTopLeftX + 400}, ${viewTopLeftY + 400})")
-    println(s"Player Position: (${player.x}, ${player.y})")
   }
 }
