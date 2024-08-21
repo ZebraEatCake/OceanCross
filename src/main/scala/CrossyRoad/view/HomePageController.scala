@@ -10,4 +10,8 @@ class HomePageController(private val playButton: Button) {
   def startGame(): Unit = {
     MainApp.showMainGame()
   }
+
+  def quitGame():Unit = {
+    MainApp.quit()
+  }
 }

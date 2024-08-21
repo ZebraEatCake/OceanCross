@@ -52,7 +52,6 @@ object MainApp extends JFXApp {
     this.roots.setCenter(roots)
   }
 
-
   // Set up the stage with the root layout
   stage = new PrimaryStage {
     title = "Crossy Road Game"
@@ -66,7 +65,13 @@ object MainApp extends JFXApp {
     }
   }
 
-
-  // Call showMainGame to display the game
+  // Call HomePage to display the game
   showHomePage()
+
+  def quit(): Unit = {
+    gameController.shutdown()
+    stage.close()
+  }
+
+
 }
