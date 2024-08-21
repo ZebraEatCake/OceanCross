@@ -15,7 +15,7 @@ import javafx.{scene => jfxs}
 
 object MainApp extends JFXApp {
   // Initialize the game model and controllers
-  val player = new Player(200, 200)
+  val player = new Player(200, 40)
   val gameModel = new GameModel(player)
   val playerController = new PlayerController(player)
   val gameController = new GameController(playerController, gameModel)

@@ -61,7 +61,7 @@ class GameModel(val player: Player) {
     state = Playing
     viewTopLeftY = 0.0
     player.x = 200
-    player.y = 200
+    player.y = 40
     lastObstacleY = 0.0
     obstacles = List(
       new Obstacle(200, 200, 1),

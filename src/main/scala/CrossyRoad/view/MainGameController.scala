@@ -41,7 +41,7 @@ class MainGameController(private var gameCanvas: Canvas){
     drawPlayer(player, viewTopLeftX, viewTopLeftY)
     drawObstacles(viewTopLeftX, viewTopLeftY)
 
-    if (isPlayerOutOfBounds(player, viewTopLeftX, viewTopLeftY)) {
+    if (isPlayerOutOfBounds(player, viewTopLeftX, viewTopLeftY) || isPlayerCollidingWithObstacle(player)) {
       MainApp.showGameOver()
       gameModel.state = GameState.GameOver
     }
@@ -80,6 +80,27 @@ class MainGameController(private var gameCanvas: Canvas){
     val playerY = 400 - (player.y - viewTopLeftY)
     val playerSize = 20
     playerX + playerSize <= 0 || playerX >= 400 || playerY + playerSize <= 0 || playerY >= 400
+  }
+
+  private def isPlayerCollidingWithObstacle(player: Player): Boolean = {
+    val playerSize = 20
+    gameModel.obstacles.exists { obstacle =>
+      val obstacleSize = 20
+      val playerLeft = player.x
+      val playerRight = player.x + playerSize
+      val playerTop = player.y
+      val playerBottom = player.y + playerSize
+
+      val obstacleLeft = obstacle.x
+      val obstacleRight = obstacle.x + obstacleSize
+      val obstacleTop = obstacle.y
+      val obstacleBottom = obstacle.y + obstacleSize
+
+      playerRight > obstacleLeft &&
+        playerLeft < obstacleRight &&
+        playerBottom > obstacleTop &&
+        playerTop < obstacleBottom
+    }
   }
 
   private def printCoordinates(viewTopLeftX: Double, viewTopLeftY: Double, player: Player): Unit = {
