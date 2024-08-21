@@ -4,11 +4,12 @@ import CrossyRoad.MainApp
 import CrossyRoad.MainApp.{gameController, gameModel, showGameOver}
 import scalafx.scene.canvas.Canvas
 import scalafx.scene.paint.Color
-import CrossyRoad.model.{GameModel, GameState, Player, Obstacle}
+import CrossyRoad.model.{GameModel, GameState, Obstacle, Player}
 import scalafx.Includes._
 import scalafx.application.Platform
 import scalafx.scene.control.{Alert, ButtonType}
 import scalafx.scene.control.Alert.AlertType
+import scalafx.scene.text.Font
 import scalafxml.core.macros.sfxml
 
 @sfxml
@@ -35,6 +36,7 @@ class MainGameController(private var gameCanvas: Canvas){
     val viewTopLeftY = gameModel.viewTopLeftY
     val viewTopLeftX = 0
 
+
     graphicsContext.clearRect(0, 0, gameCanvas.width.value, gameCanvas.height.value)
 
     drawGameWorld(viewTopLeftX, viewTopLeftY)
@@ -58,22 +60,50 @@ class MainGameController(private var gameCanvas: Canvas){
   private def drawPlayer(player: Player, viewTopLeftX: Double, viewTopLeftY: Double): Unit = {
     val graphicsContext = gameCanvas.graphicsContext2D
     graphicsContext.fill = Color.Green
-    val playerSize = 20
+    val playerFontSize = 20
     val playerX = player.x - viewTopLeftX
     val playerY = 400 - (player.y - viewTopLeftY)
-    graphicsContext.fillRect(playerX, playerY, playerSize, playerSize)
+
+    // Set the font to a larger size to make the player more visible
+    val font = new Font("Segoe UI Historic", playerFontSize)
+    graphicsContext.setFont(font)
+
+    // Draw the player using the specified font character
+    graphicsContext.fillText("𓊝", playerX, playerY)
   }
+
 
   private def drawObstacles(viewTopLeftX: Double, viewTopLeftY: Double): Unit = {
     val graphicsContext = gameCanvas.graphicsContext2D
     graphicsContext.fill = Color.Red
-    val obstacleSize = 20
+    val obstacleFontSize = 20
+
+    // Set the font to a suitable size for the obstacle
+    val font = new Font("Segoe UI Historic", obstacleFontSize)
+    graphicsContext.setFont(font)
+
     gameModel.obstacles.foreach(obstacle => {
       val obstacleX = obstacle.x - viewTopLeftX
       val obstacleY = 400 - (obstacle.y - viewTopLeftY)
-      graphicsContext.fillRect(obstacleX, obstacleY, obstacleSize, obstacleSize)
+
+      // Save the current transformation state
+      graphicsContext.save()
+
+      // Flip the character horizontally if the direction is -1
+      if (obstacle.direction == 1) {
+        graphicsContext.scale(-1, 1)
+        graphicsContext.translate(-2 * obstacleX - obstacleFontSize, 0)
+      }
+
+      // Draw the obstacle using the character
+      graphicsContext.fillText("﹏\uD80C\uDC81﹏", obstacleX, obstacleY)
+
+      // Restore the original transformation state
+      graphicsContext.restore()
     })
   }
+
+
 
   private def isPlayerOutOfBounds(player: Player, viewTopLeftX: Double, viewTopLeftY: Double): Boolean = {
     val playerX = player.x - viewTopLeftX
