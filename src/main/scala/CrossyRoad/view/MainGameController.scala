@@ -1,14 +1,12 @@
 package CrossyRoad.view
 
 import CrossyRoad.MainApp
-import CrossyRoad.MainApp.{gameController, gameModel, showGameOver}
+import CrossyRoad.MainApp.{gameController, gameModel}
 import scalafx.scene.canvas.Canvas
 import scalafx.scene.paint.Color
-import CrossyRoad.model.{GameModel, GameState, Obstacle, Player}
-import scalafx.Includes._
+import CrossyRoad.model.{GameState, Player}
 import scalafx.application.Platform
-import scalafx.scene.control.{Alert, ButtonType, Label}
-import scalafx.scene.control.Alert.AlertType
+import scalafx.scene.control.{Label}
 import scalafx.scene.text.Font
 import scalafxml.core.macros.sfxml
 
@@ -16,7 +14,6 @@ import scalafxml.core.macros.sfxml
 class MainGameController(private var gameCanvas: Canvas, private var scoreLabel: Label) {
 
   private var elapsedTime: Double = 0.0
-  private var lastSpeedIncreaseTime: Double = 0.0
 
   def initialize(): Unit = {
     gameController.startGameLoop(update)
@@ -108,9 +105,7 @@ class MainGameController(private var gameCanvas: Canvas, private var scoreLabel:
   }
 
   private def updateScore(): Unit = {
-    Platform.runLater {
       scoreLabel.text = s"Score: ${gameModel.highestY.toInt}"
-    }
   }
 
   private def isPlayerOutOfBounds(player: Player, viewTopLeftX: Double, viewTopLeftY: Double): Boolean = {

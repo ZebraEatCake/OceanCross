@@ -1,9 +1,6 @@
 package CrossyRoad.view
 
 import CrossyRoad.model.Player
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration._
 
 class PlayerController(val player: Player) {
   private var lastActionTime: Long = 0
@@ -18,7 +15,7 @@ class PlayerController(val player: Player) {
         case "S" => player.moveDown()
         case "A" => player.moveLeft()
         case "D" => player.moveRight()
-        case _ => // Do nothing for other keys
+        case _ =>
       }
       lastActionTime = currentTime
     }

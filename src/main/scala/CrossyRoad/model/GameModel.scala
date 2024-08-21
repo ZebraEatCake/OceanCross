@@ -1,6 +1,8 @@
 package CrossyRoad.model
 
+
 import CrossyRoad.MainApp
+
 import scala.util.Random
 
 object GameState extends Enumeration {

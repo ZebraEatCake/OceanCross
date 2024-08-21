@@ -3,12 +3,10 @@ package CrossyRoad
 import scalafx.application.JFXApp
 import scalafx.application.JFXApp.PrimaryStage
 import scalafx.scene.Scene
-import scalafx.scene.layout.BorderPane
-import scalafx.scene.layout.AnchorPane
 import scalafxml.core.{FXMLLoader, NoDependencyResolver}
-import CrossyRoad.model.{GameModel, Obstacle, Player}
+import CrossyRoad.model.{GameModel,Player}
 import CrossyRoad.util.SoundManager
-import CrossyRoad.view.{GameController, MainGameController, PlayerController}
+import CrossyRoad.view.{GameController, PlayerController}
 import scalafx.Includes._
 import javafx.{scene => jfxs}
 
@@ -39,6 +37,7 @@ object MainApp extends JFXApp {
     this.roots.setCenter(roots)
   }
 
+  //show the game over view
   def showGameOver(): Unit = {
     val resource = getClass.getResource("view/GameOver.fxml")
     val loader = new FXMLLoader(resource, NoDependencyResolver)
@@ -47,6 +46,7 @@ object MainApp extends JFXApp {
     this.roots.setCenter(roots)
   }
 
+  //show the home page view
   def showHomePage(): Unit = {
     val resource = getClass.getResource("view/HomePage.fxml")
     val loader = new FXMLLoader(resource, NoDependencyResolver)
@@ -55,6 +55,7 @@ object MainApp extends JFXApp {
     this.roots.setCenter(roots)
   }
 
+  //show the tutorial view
   def showTutorial(): Unit = {
     val resource = getClass.getResource("view/Tutorial.fxml")
     val loader = new FXMLLoader(resource, NoDependencyResolver)
@@ -77,8 +78,9 @@ object MainApp extends JFXApp {
       gameController.shutdown()
     }
 
+    // Play the music when stage is created
     onShown = handle {
-      soundManager.playBackgroundMusic() // Play the music when the window is shown
+      soundManager.playBackgroundMusic()
     }
 
   }
