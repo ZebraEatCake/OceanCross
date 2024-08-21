@@ -7,13 +7,13 @@ import scalafx.scene.paint.Color
 import CrossyRoad.model.{GameModel, GameState, Obstacle, Player}
 import scalafx.Includes._
 import scalafx.application.Platform
-import scalafx.scene.control.{Alert, ButtonType}
+import scalafx.scene.control.{Alert, ButtonType, Label}
 import scalafx.scene.control.Alert.AlertType
 import scalafx.scene.text.Font
 import scalafxml.core.macros.sfxml
 
 @sfxml
-class MainGameController(private var gameCanvas: Canvas){
+class MainGameController(private var gameCanvas: Canvas, private var scoreLabel: Label) {
 
   def initialize(): Unit = {
     gameController.startGameLoop(update)
@@ -36,12 +36,14 @@ class MainGameController(private var gameCanvas: Canvas){
     val viewTopLeftY = gameModel.viewTopLeftY
     val viewTopLeftX = 0
 
-
     graphicsContext.clearRect(0, 0, gameCanvas.width.value, gameCanvas.height.value)
 
     drawGameWorld(viewTopLeftX, viewTopLeftY)
     drawPlayer(player, viewTopLeftX, viewTopLeftY)
     drawObstacles(viewTopLeftX, viewTopLeftY)
+
+    // Update the score label with the highest y-value
+    updateScore()
 
     if (isPlayerOutOfBounds(player, viewTopLeftX, viewTopLeftY) || isPlayerCollidingWithObstacle(player)) {
       MainApp.showGameOver()
@@ -64,21 +66,16 @@ class MainGameController(private var gameCanvas: Canvas){
     val playerX = player.x - viewTopLeftX
     val playerY = 400 - (player.y - viewTopLeftY)
 
-    // Set the font to a larger size to make the player more visible
     val font = new Font("Segoe UI Historic", playerFontSize)
     graphicsContext.setFont(font)
-
-    // Draw the player using the specified font character
     graphicsContext.fillText("𓊝", playerX, playerY)
   }
-
 
   private def drawObstacles(viewTopLeftX: Double, viewTopLeftY: Double): Unit = {
     val graphicsContext = gameCanvas.graphicsContext2D
     graphicsContext.fill = Color.Red
     val obstacleFontSize = 20
 
-    // Set the font to a suitable size for the obstacle
     val font = new Font("Segoe UI Historic", obstacleFontSize)
     graphicsContext.setFont(font)
 
@@ -86,24 +83,23 @@ class MainGameController(private var gameCanvas: Canvas){
       val obstacleX = obstacle.x - viewTopLeftX
       val obstacleY = 400 - (obstacle.y - viewTopLeftY)
 
-      // Save the current transformation state
       graphicsContext.save()
 
-      // Flip the character horizontally if the direction is -1
       if (obstacle.direction == 1) {
         graphicsContext.scale(-1, 1)
         graphicsContext.translate(-2 * obstacleX - obstacleFontSize, 0)
       }
 
-      // Draw the obstacle using the character
       graphicsContext.fillText("﹏\uD80C\uDC81﹏", obstacleX, obstacleY)
-
-      // Restore the original transformation state
       graphicsContext.restore()
     })
   }
 
-
+  private def updateScore(): Unit = {
+    Platform.runLater {
+      scoreLabel.text = s"Score: ${gameModel.highestY.toInt}"
+    }
+  }
 
   private def isPlayerOutOfBounds(player: Player, viewTopLeftX: Double, viewTopLeftY: Double): Boolean = {
     val playerX = player.x - viewTopLeftX

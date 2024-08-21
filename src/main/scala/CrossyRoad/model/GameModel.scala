@@ -20,6 +20,8 @@ class GameModel(val player: Player) {
   private val maxObstaclesPerRow: Int = 3 // Maximum number of obstacles per row
   private var lastObstacleY: Double = 0.0
 
+  var highestY: Double = player.y
+
   var obstacles: List[Obstacle] = List(
     new Obstacle(200, 200, 1),
     new Obstacle(300, 300, -1)
@@ -32,7 +34,6 @@ class GameModel(val player: Player) {
     if (player.y >= viewTopLeftY + middleY) {
       viewTopLeftY += 20
 
-      // Check if new obstacles should be generated
       if ((player.y - lastObstacleY) >= 20) {
         generateObstacles()
         lastObstacleY = player.y
@@ -41,7 +42,11 @@ class GameModel(val player: Player) {
       viewTopLeftY += scrollSpeed * deltaTime
     }
 
-    // Update obstacles
+    // Update the highest y-value if the player moves upward
+    if (player.y > highestY) {
+      highestY = player.y
+    }
+
     obstacles.foreach(obstacle => obstacle.move(1.0, -scrollSpeed * deltaTime))
   }
 
