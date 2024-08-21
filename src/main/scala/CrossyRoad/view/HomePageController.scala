@@ -5,10 +5,9 @@ import scalafx.scene.control.Button
 import CrossyRoad.MainApp
 
 @sfxml
-class GameOverController(private val restartButton: Button) {
+class HomePageController(private val playButton: Button) {
 
-  def handleRestart(): Unit = {
-    MainApp.gameModel.restart()
+  def startGame(): Unit = {
     MainApp.showMainGame()
   }
 }

@@ -44,6 +44,14 @@ object MainApp extends JFXApp {
     this.roots.setCenter(roots)
   }
 
+  def showHomePage(): Unit = {
+    val resource = getClass.getResource("view/HomePage.fxml")
+    val loader = new FXMLLoader(resource, NoDependencyResolver)
+    loader.load()
+    val roots = loader.getRoot[jfxs.layout.AnchorPane]
+    this.roots.setCenter(roots)
+  }
+
 
   // Set up the stage with the root layout
   stage = new PrimaryStage {
@@ -60,5 +68,5 @@ object MainApp extends JFXApp {
 
 
   // Call showMainGame to display the game
-  showMainGame()
+  showHomePage()
 }

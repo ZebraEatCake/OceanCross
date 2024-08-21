@@ -48,7 +48,7 @@ class GameModel(val player: Player) {
   private def generateObstacles(): Unit = {
     val numberOfObstacles = Random.nextInt(maxObstaclesPerRow) + 1
     val obstaclePositions = (1 to numberOfObstacles).map { _ =>
-      val newObstacleX = Random.nextInt(400) // Adjust the range as per your game's width
+      val newObstacleX = Random.nextInt(400)
       val newObstacleY = viewTopLeftY + viewHeight
       val direction = if (Random.nextBoolean()) 1 else -1 // Randomly assign left (-1) or right (1) direction
       new Obstacle(newObstacleX, newObstacleY, direction)
