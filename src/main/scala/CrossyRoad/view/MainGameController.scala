@@ -15,6 +15,9 @@ import scalafxml.core.macros.sfxml
 @sfxml
 class MainGameController(private var gameCanvas: Canvas, private var scoreLabel: Label) {
 
+  private var elapsedTime: Double = 0.0
+  private var lastSpeedIncreaseTime: Double = 0.0
+
   def initialize(): Unit = {
     gameController.startGameLoop(update)
   }
@@ -25,12 +28,21 @@ class MainGameController(private var gameCanvas: Canvas, private var scoreLabel:
     if (gameModel.state == GameState.Playing) {
       updatePlayingState()
     } else {
-      println("update")
+      gameModel.scrollSpeed = 8.0 // Reset scroll speed to its initial value
       gameController.stopGameLoop()
     }
   }
 
   private def updatePlayingState(): Unit = {
+    elapsedTime += 1.0 / 60.0 // Assuming 60 FPS
+
+    // Increase scroll speed every 10 seconds
+    if (elapsedTime >= 10.0 && gameModel.scrollSpeed<=30) {
+      println(gameModel.scrollSpeed.toInt)
+      gameModel.scrollSpeed += 10.0
+      elapsedTime = 0.0 // Reset elapsed time after increasing speed
+    }
+
     val graphicsContext = gameCanvas.graphicsContext2D
     val player = gameModel.player
     val viewTopLeftY = gameModel.viewTopLeftY

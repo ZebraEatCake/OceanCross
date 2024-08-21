@@ -14,4 +14,9 @@ class HomePageController(private val playButton: Button) {
   def quitGame():Unit = {
     MainApp.quit()
   }
+
+  def showTutorial():Unit = {
+    MainApp.showTutorial()
+  }
+
 }

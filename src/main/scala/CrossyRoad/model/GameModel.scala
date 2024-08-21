@@ -13,7 +13,7 @@ class GameModel(val player: Player) {
 
   var state: GameState = Playing
   var viewTopLeftY: Double = 0.0
-  private val scrollSpeed: Double = 5.0 // pixels per second
+  var scrollSpeed: Double = 8.0 // pixels per second
   private val viewHeight = 400
   private val middleY = viewHeight / 2
   private val obstacleGenerationChance: Double = 0.3
@@ -68,6 +68,7 @@ class GameModel(val player: Player) {
     player.x = 200
     player.y = 40
     lastObstacleY = 0.0
+    highestY = player.y
     obstacles = List(
       new Obstacle(200, 200, 1),
       new Obstacle(300, 300, -1)

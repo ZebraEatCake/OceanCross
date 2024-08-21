@@ -7,6 +7,7 @@ import scalafx.scene.layout.BorderPane
 import scalafx.scene.layout.AnchorPane
 import scalafxml.core.{FXMLLoader, NoDependencyResolver}
 import CrossyRoad.model.{GameModel, Obstacle, Player}
+import CrossyRoad.util.SoundManager
 import CrossyRoad.view.{GameController, MainGameController, PlayerController}
 import scalafx.Includes._
 import javafx.{scene => jfxs}
@@ -19,6 +20,8 @@ object MainApp extends JFXApp {
   val gameModel = new GameModel(player)
   val playerController = new PlayerController(player)
   val gameController = new GameController(playerController, gameModel)
+  val soundManager = new SoundManager()
+
 
   // Load the RootLayout.fxml file
   val rootResource = getClass.getResource("view/RootLayout.fxml")
@@ -52,7 +55,16 @@ object MainApp extends JFXApp {
     this.roots.setCenter(roots)
   }
 
-  // Set up the stage with the root layout
+  def showTutorial(): Unit = {
+    val resource = getClass.getResource("view/Tutorial.fxml")
+    val loader = new FXMLLoader(resource, NoDependencyResolver)
+    loader.load()
+    val roots = loader.getRoot[jfxs.layout.AnchorPane]
+    this.roots.setCenter(roots)
+  }
+
+
+    // Set up the stage with the root layout
   stage = new PrimaryStage {
     title = "Crossy Road Game"
     scene = new Scene(roots) {
@@ -60,18 +72,22 @@ object MainApp extends JFXApp {
         gameController.processInput(event.text.toUpperCase)
       }
     }
+
     onCloseRequest = handle {
       gameController.shutdown()
     }
+
+    onShown = handle {
+      soundManager.playBackgroundMusic() // Play the music when the window is shown
+    }
+
   }
+    // Call HomePage to display the game
+    showHomePage()
 
-  // Call HomePage to display the game
-  showHomePage()
-
-  def quit(): Unit = {
-    gameController.shutdown()
-    stage.close()
-  }
-
+    def quit(): Unit = {
+      gameController.shutdown()
+      stage.close()
+    }
 
 }
