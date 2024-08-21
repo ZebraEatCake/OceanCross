@@ -5,8 +5,7 @@ import CrossyRoad.MainApp.{gameController, gameModel}
 import scalafx.scene.canvas.Canvas
 import scalafx.scene.paint.Color
 import CrossyRoad.model.{GameState, Player}
-import scalafx.application.Platform
-import scalafx.scene.control.{Label}
+import scalafx.scene.control.Label
 import scalafx.scene.text.Font
 import scalafxml.core.macros.sfxml
 
@@ -105,7 +104,8 @@ class MainGameController(private var gameCanvas: Canvas, private var scoreLabel:
   }
 
   private def updateScore(): Unit = {
-      scoreLabel.text = s"Score: ${gameModel.highestY.toInt}"
+    val score = gameModel.player.y - 40 //minus initial Y
+    scoreLabel.text = s"Score: ${score.toInt}"
   }
 
   private def isPlayerOutOfBounds(player: Player, viewTopLeftX: Double, viewTopLeftY: Double): Boolean = {
