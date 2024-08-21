@@ -68,7 +68,7 @@ class MainGameController(private var gameCanvas: Canvas){
     val graphicsContext = gameCanvas.graphicsContext2D
     graphicsContext.fill = Color.Red
     val obstacleSize = 20
-    gameModel.obstacle.foreach(obstacle => {
+    gameModel.obstacles.foreach(obstacle => {
       val obstacleX = obstacle.x - viewTopLeftX
       val obstacleY = 400 - (obstacle.y - viewTopLeftY)
       graphicsContext.fillRect(obstacleX, obstacleY, obstacleSize, obstacleSize)

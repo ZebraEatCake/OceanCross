@@ -17,12 +17,13 @@ class GameModel(val player: Player) {
   private val viewHeight = 400
   private val middleY = viewHeight / 2
   private val obstacleGenerationChance: Double = 0.3
+  private val maxObstaclesPerRow: Int = 3 // Maximum number of obstacles per row
   private var lastObstacleY: Double = 0.0
 
-  var obstacle: List[Obstacle] = List(
-    new Obstacle(200, 200),
-    new Obstacle(300, 300)
-    // Initial obstacles
+  var obstacles: List[Obstacle] = List(
+    new Obstacle(200, 200, 1),
+    new Obstacle(300, 300, -1)
+    // Initial obstacles with random directions
   )
 
   def isGameOver: Boolean = state == GameOver
@@ -31,9 +32,9 @@ class GameModel(val player: Player) {
     if (player.y >= viewTopLeftY + middleY) {
       viewTopLeftY += 20
 
-      // Check if a new obstacle should be generated
-      if ((player.y - lastObstacleY) >= 20 && Random.nextDouble() < obstacleGenerationChance) {
-        generateObstacle()
+      // Check if new obstacles should be generated
+      if ((player.y - lastObstacleY) >= 20) {
+        generateObstacles()
         lastObstacleY = player.y
       }
     } else {
@@ -41,13 +42,18 @@ class GameModel(val player: Player) {
     }
 
     // Update obstacles
-    obstacle.foreach(obstacle => obstacle.move(-1, -scrollSpeed * deltaTime))
+    obstacles.foreach(obstacle => obstacle.move(1.0, -scrollSpeed * deltaTime))
   }
 
-  private def generateObstacle(): Unit = {
-    val newObstacleX = Random.nextInt(400)
-    val newObstacleY = viewTopLeftY + viewHeight
-    obstacle = new Obstacle(newObstacleX, newObstacleY) :: obstacle
+  private def generateObstacles(): Unit = {
+    val numberOfObstacles = Random.nextInt(maxObstaclesPerRow) + 1
+    val obstaclePositions = (1 to numberOfObstacles).map { _ =>
+      val newObstacleX = Random.nextInt(400) // Adjust the range as per your game's width
+      val newObstacleY = viewTopLeftY + viewHeight
+      val direction = if (Random.nextBoolean()) 1 else -1 // Randomly assign left (-1) or right (1) direction
+      new Obstacle(newObstacleX, newObstacleY, direction)
+    }
+    obstacles = obstaclePositions.toList ::: obstacles
   }
 
   def restart(): Unit = {
@@ -57,9 +63,9 @@ class GameModel(val player: Player) {
     player.x = 200
     player.y = 200
     lastObstacleY = 0.0
-    obstacle = List(
-      new Obstacle(200, 200),
-      new Obstacle(300, 300)
+    obstacles = List(
+      new Obstacle(200, 200, 1),
+      new Obstacle(300, 300, -1)
     )
   }
 }
